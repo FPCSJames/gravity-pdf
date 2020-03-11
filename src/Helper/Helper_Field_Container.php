@@ -97,6 +97,15 @@ class Helper_Field_Container {
 		'section',
 		'html',
 	];
+	
+	/**
+	 * Whether skipped fields should be wrapped in a container
+	 *
+	 * @var boolean
+	 *
+	 * @since 5.2.3
+	 */
+	private $wrap_skipped_fields = true;
 
 	/**
 	 * Classes which will automatically begin a new row
@@ -147,6 +156,7 @@ class Helper_Field_Container {
 		$this->skip_fields         = apply_filters( 'gfpdf_container_skip_fields', $this->skip_fields );
 		$this->row_stopper_classes = apply_filters( 'gfpdf_container_row_stopper_classes', $this->row_stopper_classes );
 		$this->faux_column         = apply_filters( 'gfpdf_container_disable_faux_columns', $this->faux_column );
+		$this->wrap_skipped_fields = apply_filters( 'gfpdf_container_wrap_skipped_fields', $this->wrap_skipped_fields );
 	}
 
 
@@ -162,7 +172,7 @@ class Helper_Field_Container {
 	public function generate( GF_Field $field ) {
 
 		/* Check if we are processing a field that should not be floated and treat it as a 100% field */
-		if( $this->process_skipped_fields( $field ) ) {
+		if( !$this->wrap_skipped_fields && $this->process_skipped_fields( $field ) ) {
 			return;
 		}
 
